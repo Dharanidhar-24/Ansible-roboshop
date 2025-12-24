@@ -20,17 +20,27 @@
     loop: "{{ instances }}"
     register: ec2_output
 
+# Here we are just using this to get ip address this is not necessary just for practice purpose only
   - name: print the ec2_output
     ansible.builtin.debug:
       msg: "{{ ec2_output }}"
 
   - name: print public_ip
     ansible.builtin.debug: 
-      msg: "{{ item.instances[0].public_ip_address }}"
-    loop: "{{ ec2_output.results }}"
+      msg: "{{ item.instances[0].public_ip_address }}" # here instances may be multiple while referring we need to do like this
+    loop: "{{ ec2_output.results }}" # Here we are taking whole results to get all details 
   
   - name: print private_ip
     ansible.builtin.debug:
       msg: "{{ item.instances[0].private_ip_address }}"
     loop: "{{ ec2_output.results }}"
-    
+
+  - name: create route53 record
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{ item.item }}.{{ domain_name }}" # mongodb.dhar.fun # here first item is for reffereing variable in loop and 2nd is for to get item details in the ec2_output. 
+      type: A
+      value: "{{ item.instances[0].private_ip_address }}" # need to provide ip address
+      overwrite: true
+    loop: "{{ ec2_output.results }}"
