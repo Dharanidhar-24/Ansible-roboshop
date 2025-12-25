@@ -67,4 +67,10 @@
   - name: load products into mongodb
     ansible.builtin.shell: mongosh --host mongodb.dhar.fun </app/db/master-data.js
     when: catalogue_output.stdout | int < 0  # it means converting string to integer
-    
+
+  - name: start and enable catalogue
+    ansible.builtin.service:
+      name: catalogue
+      enabled: true
+      state: started
+      daemon_reload: true
