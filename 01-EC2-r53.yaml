@@ -6,6 +6,7 @@
     sg_id: sg-020423da8fc378e44
     zone_id: "Z0803677SZ6F3YQK4KAM" # DNS zone id
     domain_name: "dhar.fun"
+    # we can comment instances and pass through command line using -e "instances=['mongodb','redis','cart']"
     instances:
     - mongodb
   tasks:
