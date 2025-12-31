@@ -1,0 +1,12 @@
+- name: install nginx
+  hosts: dynamic_frontend
+  become: yes
+  tasks:
+  - name: install nginx
+    ansible.builtin.dnf:
+      name: nginx
+      state: present
+
+# now here we defined hosts as dynamically details will get from the frontend.aws_ec2.yaml
+# in hosts parameter we need to give group name.
+# now ipaddress fetch from there and install the nginx on all servers.
